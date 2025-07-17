@@ -97,7 +97,7 @@ const NewPassword: React.FC = () => {
                 type="password"
                 value={password}
                 onIonInput={(e) => setPassword(e.detail.value!)}
-                placeholder="Votre nouveau mot de passe"
+               
                 className="text-black dark:text-white"
               />
             </IonItem>
@@ -113,7 +113,6 @@ const NewPassword: React.FC = () => {
                 type="password"
                 value={confirmPassword}
                 onIonInput={(e) => setConfirmPassword(e.detail.value!)}
-                placeholder="Confirmez votre mot de passe"
                 className="text-black dark:text-white"
               />
             </IonItem>

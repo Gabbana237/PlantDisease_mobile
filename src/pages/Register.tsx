@@ -77,7 +77,7 @@ const Register: React.FC = () => {
                   type="text"
                   value={username}
                   onIonInput={(e) => setUsername(e.detail.value!)}
-                  placeholder="Votre nom d'utilisateur"
+                  
                   className="text-black dark:text-white"
                 />
               </IonItem>
@@ -93,7 +93,7 @@ const Register: React.FC = () => {
                   type="email"
                   value={email}
                   onIonInput={(e) => setEmail(e.detail.value!)}
-                  placeholder="Votre adresse email"
+                
                   className="text-black dark:text-white"
                 />
               </IonItem>
@@ -109,7 +109,7 @@ const Register: React.FC = () => {
                   type="password"
                   value={password}
                   onIonInput={(e) => setPassword(e.detail.value!)}
-                  placeholder="Votre mot de passe"
+               
                   className="text-black dark:text-white"
                 />
               </IonItem>

@@ -70,7 +70,7 @@ const ForgotPassword: React.FC = () => {
                 type="email"
                 value={email}
                 onIonInput={(e) => setEmail(e.detail.value!)}
-                placeholder="Votre adresse email"
+               
                 className="text-black dark:text-white"
               />
             </IonItem>

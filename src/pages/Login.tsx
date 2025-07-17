@@ -1,4 +1,3 @@
-// src/pages/Login.tsx
 import {
   IonPage,
   IonContent,
@@ -10,21 +9,51 @@ import {
   IonSpinner,
   IonIcon,
   IonList,
+  useIonRouter,
 } from '@ionic/react';
 import { mailOutline, lockClosedOutline, logInOutline } from 'ionicons/icons';
 import { useState } from 'react';
+import apiService from '../services/apiService';
+
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading]   = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const router = useIonRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setErrorMsg('');
+    setLoading(true);
 
-   
+    try {
+      // ➜ POST /login (ou /auth/login) sur ton API Laravel
+      const { access_token, user } = await apiService.login(email, password);
+
+      // Stocke le jeton (et l’utilisateur, si tu veux le garder localement)
+      localStorage.setItem('token', access_token);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      // Redirige vers une page protégée
+      router.push('/dashboard', 'root');
+    } catch (err: any) {
+      /**
+       * Structure d’erreur côté Laravel :
+       *   - 422 : { errors: { email: ['…'], password: ['…'] } }
+       *   - 401 : { message: 'Invalid credentials' }
+       */
+      if (err?.errors) {
+        const firstField = Object.values<string[]>(err.errors)[0];
+        setErrorMsg(firstField[0]);
+      } else if (err?.message) {
+        setErrorMsg(err.message);
+      } else {
+        setErrorMsg('Une erreur est survenue. Veuillez réessayer.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -58,7 +87,6 @@ const Login: React.FC = () => {
                   type="email"
                   value={email}
                   onIonInput={(e) => setEmail(e.detail.value!)}
-                  placeholder="Votre adresse email"
                   className="text-black dark:text-white"
                 />
               </IonItem>
@@ -74,7 +102,6 @@ const Login: React.FC = () => {
                   type="password"
                   value={password}
                   onIonInput={(e) => setPassword(e.detail.value!)}
-                  placeholder="Votre mot de passe"
                   className="text-black dark:text-white"
                 />
               </IonItem>
@@ -82,7 +109,10 @@ const Login: React.FC = () => {
 
             {/* Message d'erreur */}
             {errorMsg && (
-              <IonNote color="danger" className="block text-center mb-4 p-2 bg-red-50 dark:bg-red-900 rounded-lg">
+              <IonNote
+                color="danger"
+                className="block text-center mb-4 p-2 bg-red-50 dark:bg-red-900 rounded-lg"
+              >
                 {errorMsg}
               </IonNote>
             )}
@@ -93,7 +123,7 @@ const Login: React.FC = () => {
               type="submit"
               disabled={loading}
               fill="solid"
-              style={{ 
+              style={{
                 '--background': '#FACC15',
                 '--background-activated': '#EAB308',
                 '--background-focused': '#EAB308',
@@ -102,7 +132,7 @@ const Login: React.FC = () => {
                 '--border-radius': '8px',
                 height: '48px',
                 fontSize: '16px',
-                fontWeight: '600'
+                fontWeight: '600',
               }}
               className="transition-all duration-200"
             >
@@ -119,16 +149,16 @@ const Login: React.FC = () => {
 
           {/* Liens supplémentaires */}
           <div className="mt-6 text-center text-sm w-full max-w-md">
-            <a 
-              href="/forgot-password" 
+            <a
+              href="/forgot-password"
               className="text-yellow-500 hover:text-yellow-600 transition-colors duration-200"
             >
               Mot de passe oublié ?
             </a>
             <p className="mt-3 text-gray-600 dark:text-gray-400">
               Pas encore inscrit ?{' '}
-              <a 
-                href="/register" 
+              <a
+                href="/register"
                 className="text-yellow-500 hover:text-yellow-600 transition-colors duration-200"
               >
                 Créer un compte

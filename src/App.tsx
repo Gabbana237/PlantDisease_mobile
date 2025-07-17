@@ -13,6 +13,7 @@ import Tabs from './pages/Tabs';
 import Settings from './pages/Settings';
 import SettingsLanguage from './pages/SettingsLanguage';
 import About from './pages/About';
+import ResultPage from './pages/Result';
 
 /* Ionic core styles */
 import '@ionic/react/css/core.css';
@@ -44,10 +45,11 @@ const App: React.FC = () => (
         {/* Routes spécifiques */}
         <Route path="/login" exact component={Login} />
         <Route path="/register" exact component={Register} />
-        <Route path="/forgot" exact component={ForgotPassword} />
+        <Route path="/forgot-password" exact component={ForgotPassword} />
         <Route path="/verification" exact component={VerificationCode} />
         <Route path="/new-password" exact component={NewPassword} />
         <Route path="/home" exact component={Home} />
+        <Route path="/result" component={ResultPage} exact />
 
         {/* Paramètres */}
       <Route path="/profil/settings/language" component={SettingsLanguage} exact />
@@ -58,11 +60,11 @@ const App: React.FC = () => (
 
         {/* Redirection par défaut */}
         <Route exact path="/">
-          <Redirect to="/tabs/scanner" />
+          <Redirect to="/home" />
         </Route>
        
         {/* Ajouté pour éviter les erreurs de fallback */}
-        <Redirect to="/tabs/scanner" />
+        <Redirect to="/home" />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
